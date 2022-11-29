@@ -1,6 +1,6 @@
 //import {BilldAccount, CreateAccount} from './functions.js';
 
-import {nome, CreateAccount, BildAccount} from './functions.js'
+import {CreateAccount, BildAccount, CheckAccount, Consult, Deposit, Withdraw} from './functions.js'
 
 //Imports Externos
 import inquirer from 'inquirer';
@@ -10,8 +10,6 @@ import fs from 'fs'
 
 
 //Imports Functions.js
-
-
 
 function operation(){
     inquirer.prompt([{
@@ -34,17 +32,83 @@ function operation(){
 
         else if(option == 'Consultar Saldo'){
 
+            inquirer.prompt([{
+                type : "input",
+                name : "nome",
+                message : "Digite seu nome"
+            }]).then((answer) => {
+                var nome = answer["nome"]
+                var check = CheckAccount(nome)
+
+                if(check){
+
+                    console.log(`R$ ${Consult(nome)}`)
+                    
+                } else{
+                    console.log("Conta inválida, tente novamente")
+                    operation()
+                }
+            })
+
+
         }
 
-        else if(option == 'Deoósitar Dinheiro'){
+        else if(option == 'Depósitar Dinheiro'){
+            inquirer.prompt([{
+                type : "input",
+                name : "nome",
+                message : "Digite seu nome"
+            }]).then((answer) => {
+                var nome = answer["nome"]
+
+                if(CheckAccount(nome)){
+
+                    inquirer.prompt([{
+                        type : "input",
+                        name: "valor",
+                        message : "Quanto você deseja depósitar? "
+                    }]).then((answer) => {
+                        var valor = answer["valor"]
+
+                        Deposit(nome, valor)
+                    })
+
+                }
+            }).catch((err) => {console.log(err)})
             
         }
 
         else if(option == 'Sacar Dinheiro'){
+
+            inquirer.prompt([{
+                type : "input",
+                name : "nome",
+                message : "Digite seu nome"
+            }]).then((answer) => {
+                var nome = answer["nome"]
+
+                if(CheckAccount(nome)){
+
+                    inquirer.prompt([{
+                        type : "input",
+                        name: "valor",
+                        message : "Quanto você deseja sacar? "
+                    }]).then((answer) => {
+                        var valor = answer["valor"]
+
+                        Withdraw(nome, valor)
+                    })
+
+                }
+            }).catch((err) => {console.log(err)})
+
+
             
         }
 
         else if(option == 'Sair'){
+
+            process.exit()
             
         }
 
@@ -57,8 +121,5 @@ function operation(){
 
 operation()
 
+
 export {operation}
-
-
-
-
